@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#EDD059</headerColor>
+        <logo>ChatGPT_Image_May_20_2025_01_03_371</logo>
+        <logoVersion>1</logoVersion>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
+    <label>Mini ERP</label>
+    <navType>Standard</navType>
+    <tabs>Material__c</tabs>
+    <tabs>Stock_Adjustment__c</tabs>
+    <tabs>Work_Order__c</tabs>
+    <tabs>Work_Order_Material__c</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>Mini_ERP_UtilityBar</utilityBar>
+</CustomApplication>
