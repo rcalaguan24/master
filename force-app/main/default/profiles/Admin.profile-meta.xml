@@ -319,10 +319,6 @@
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>
-        <tab>Product_Material__c</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
-    <tabVisibilities>
         <tab>Stock_Adjustment__c</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
