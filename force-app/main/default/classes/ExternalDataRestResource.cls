@@ -17,13 +17,8 @@ global with sharing class ExternalDataRestResource {
         }
     }
 
-    private static void handleResponse(RestResponseWrapper response) {
-        RestContext.response.statusCode = response.statusCode;
-        RestContext.response.responseBody = Blob.valueOf(JSON.serialize(response));
-    }
-
     @HttpPost
-    global static void handlePost() {
+    global static RestResponseWrapper handlePost() {
         RestResponseWrapper response = new RestResponseWrapper();
         String requestBody = RestContext.request.requestBody.toString();
 
@@ -34,13 +29,14 @@ global with sharing class ExternalDataRestResource {
             } catch (System.JSONException je) {
                 response.setFail('Invalid JSON payload.', 400);
                 handleResponse(response);
+                return response;
             }
 
             // Proceed with payload saving + queue job
             External_Data_Load__c loadRecord = new External_Data_Load__c();
             loadRecord.Payload__c = requestBody;
             loadRecord.Status__c = 'Pending';
-
+            
             if (Schema.sObjectType.External_Data_Load__c.isCreateable()) {
                 insert loadRecord;
             } else {
@@ -55,5 +51,11 @@ global with sharing class ExternalDataRestResource {
         }
 
         handleResponse(response);
+        return response;
+    }
+
+    private static void handleResponse(RestResponseWrapper response) {
+        RestContext.response.statusCode = response.statusCode;
+        RestContext.response.responseBody = Blob.valueOf(JSON.serialize(response));
     }
 }
