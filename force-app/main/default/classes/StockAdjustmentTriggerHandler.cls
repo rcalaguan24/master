@@ -1,6 +1,6 @@
 public class StockAdjustmentTriggerHandler extends TriggerHandler {
     public override void beforeInsert(List<SObject> newList) {
-        StockAdjustmentService.validateStockAdjustments((List<Stock_Adjustment__c>) newList);
+        StockAdjustmentService.handleBeforeInsert((List<Stock_Adjustment__c>) newList);
     }
     public override void afterInsert(List<SObject> newList) {
         StockAdjustmentService.handleAfterInsert((List<Stock_Adjustment__c>) newList);
