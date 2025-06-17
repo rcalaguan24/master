@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Payment_Terms__c</fullName>
+    <label>Payment Terms</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Net 15</fullName>
+                <default>true</default>
+                <label>Net 15</label>
+            </value>
+            <value>
+                <fullName>Net 30</fullName>
+                <default>false</default>
+                <label>Net 30</label>
+            </value>
+            <value>
+                <fullName>Net 45</fullName>
+                <default>false</default>
+                <label>Net 45</label>
+            </value>
+            <value>
+                <fullName>Net 60</fullName>
+                <default>false</default>
+                <label>Net 60</label>
+            </value>
+            <value>
+                <fullName>Net 90</fullName>
+                <default>false</default>
+                <label>Net 90</label>
+            </value>
+            <value>
+                <fullName>2/10 Net 30</fullName>
+                <default>false</default>
+                <label>2/10 Net 30</label>
+            </value>
+            <value>
+                <fullName>1/15 Net 30</fullName>
+                <default>false</default>
+                <label>1/15 Net 30</label>
+            </value>
+            <value>
+                <fullName>COD - Cash on Delivery</fullName>
+                <default>false</default>
+                <label>COD - Cash on Delivery</label>
+            </value>
+            <value>
+                <fullName>CIA - Cash in Advance</fullName>
+                <default>false</default>
+                <label>CIA - Cash in Advance</label>
+            </value>
+            <value>
+                <fullName>Upon Receipt</fullName>
+                <default>false</default>
+                <label>Upon Receipt</label>
+            </value>
+            <value>
+                <fullName>End of Month</fullName>
+                <default>false</default>
+                <label>End of Month</label>
+            </value>
+            <value>
+                <fullName>15th of Following Month</fullName>
+                <default>false</default>
+                <label>15th of Following Month</label>
+            </value>
+            <value>
+                <fullName>30% Advance, 70% on Delivery</fullName>
+                <default>false</default>
+                <label>30% Advance, 70% on Delivery</label>
+            </value>
+            <value>
+                <fullName>Letter of Credit</fullName>
+                <default>false</default>
+                <label>Letter of Credit</label>
+            </value>
+            <value>
+                <fullName>Open Account</fullName>
+                <default>false</default>
+                <label>Open Account</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
