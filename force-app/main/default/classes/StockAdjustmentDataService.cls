@@ -1,4 +1,4 @@
-public class StockAdjustmentDataService {
+public with sharing class StockAdjustmentDataService {
     public static List<Stock_Adjustment__c> insertStockAdjustments(List<Stock_Adjustment__c> adjustments) {
         insert adjustments;
         return adjustments;
