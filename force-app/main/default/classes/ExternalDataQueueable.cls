@@ -15,23 +15,23 @@ public class ExternalDataQueueable implements Queueable {
     }
 
     public void execute(QueueableContext context) {
-        loadRecord.Status__c = 'Success';
+        loadRecord.Status__c = MessageUtility.STATUS_SUCCESS;
         loadRecord.Error_Message__c = '';
 
         try {
             processPayload(loadRecord);
         } catch (Exception ex) {
-            loadRecord.Status__c = 'Failed';
+            loadRecord.Status__c = MessageUtility.STATUS_FAILED;
             loadRecord.Error_Message__c += ex.getMessage();
         }
 
-        update loadRecord;
+        EDLDataService.upsertEDL(loadRecord);
     }
 
     @TestVisible
     private void processPayload(External_Data_Load__c loadRecord) {
         if (Test.isRunningTest() && loadRecord.Payload__c == 'throw') {
-            throw new DmlException('DML problem.');
+            throw new DmlException(MessageUtility.ERROR_DML_PROBLEM);
         }
 
         ExternalDataWrapper dataWrapper = parsePayload(loadRecord);
@@ -58,16 +58,16 @@ public class ExternalDataQueueable implements Queueable {
         try {
             return (ExternalDataWrapper) JSON.deserialize(loadRecord.Payload__c, ExternalDataWrapper.class);
         } catch (Exception ex) {
-            loadRecord.Status__c = 'Failed';
-            loadRecord.Error_Message__c = 'Invalid JSON format: ' + ex.getMessage() + '\n';
+            loadRecord.Status__c = MessageUtility.STATUS_FAILED;
+            loadRecord.Error_Message__c = MessageUtility.ERROR_INVALID_JSON_PREFIX + ex.getMessage() + '\n';
             return null;
         }
     }
 
     private Boolean validateOrderExists(ExternalDataWrapper dataWrapper, External_Data_Load__c loadRecord) {
         if (dataWrapper.order == null) {
-            loadRecord.Status__c = 'Failed';
-            loadRecord.Error_Message__c = 'Missing order information in payload.\n';
+            loadRecord.Status__c = MessageUtility.STATUS_FAILED;
+            loadRecord.Error_Message__c = MessageUtility.ERROR_MISSING_ORDER_INFO;
             return false;
         }
         return true;
@@ -78,11 +78,11 @@ public class ExternalDataQueueable implements Queueable {
             custAccount = ExternalDataService.mapAccount(dataWrapper.order, loadRecord);
         }
         if (custAccount == null) {
-            loadRecord.Status__c = 'Failed';
+            loadRecord.Status__c = MessageUtility.STATUS_FAILED;
             return false;
         }
         if (custAccount.Id == null) {
-            upsert custAccount;
+            AccountDataService.upsertAccount(custAccount);
         }
         return true;
     }
@@ -92,10 +92,11 @@ public class ExternalDataQueueable implements Queueable {
             order = ExternalDataService.mapOrder(dataWrapper.order, loadRecord, custAccount.Id);
         }
         if (order == null) {
-            loadRecord.Status__c = 'Failed';
+            loadRecord.Status__c = MessageUtility.STATUS_FAILED;
             return false;
         }
-        upsert order;
+        OrderDataService.upsertOrder(order);
+
         loadRecord.Order__c = order.Id;
         return true;
     }
@@ -105,18 +106,18 @@ public class ExternalDataQueueable implements Queueable {
             orderProducts = ExternalDataService.mapOrderItems(dataWrapper.orderProducts, loadRecord, order.Id);
         }
         if (!orderProducts.isEmpty()) {
-            List<Database.UpsertResult> upsertResults = Database.upsert(orderProducts, false);
+            List<Database.UpsertResult> upsertResults = OrderProductDataService.upsertOrderProducts(orderProducts);
             for (Database.UpsertResult res : upsertResults) {
                 if (!res.isSuccess()) {
                     for (Database.Error err : res.getErrors()) {
-                        loadRecord.Error_Message__c += 'Order_Product__c upsert error: ' + err.getMessage() + '\n';
-                        loadRecord.Status__c = 'Partial Success';
+                        loadRecord.Error_Message__c += MessageUtility.ERROR_ORDER_PRODUCT_UPSERT_PREFIX + err.getMessage() + '\n';
+                        loadRecord.Status__c = MessageUtility.STATUS_PARTIAL_SUCCESS;
                     }
                 }
             }
         } else {
-            loadRecord.Status__c = 'Partial Success';
-            loadRecord.Error_Message__c += 'No valid order items found or inserted.\n';
+            loadRecord.Status__c = MessageUtility.STATUS_PARTIAL_SUCCESS;
+            loadRecord.Error_Message__c += MessageUtility.ERROR_NO_VALID_ORDER_ITEMS;
         }
     }
 }
